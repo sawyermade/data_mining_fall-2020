@@ -1,0 +1,10 @@
+@RELATION XOR
+@ATTRIBUTE  x1 REAL
+@ATTRIBUTE  x2 REAL
+@ATTRIBUTE class {zero, one}
+
+@DATA
+0,0,zero
+0,1,one
+1,0,one
+1,1,zero

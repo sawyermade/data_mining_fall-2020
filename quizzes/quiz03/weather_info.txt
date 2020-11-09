@@ -1,0 +1,95 @@
+Yes:
+Outlook,Temperature,Humidity,Windy,Play
+overcast,85,70,FALSE,yes
+overcast,75,80,FALSE,yes
+sunny,75,70,TRUE,yes
+overcast,72,90,TRUE,yes
+overcast,81,75,FALSE,yes
+overcast,64,65,TRUE,yes
+overcast,83,86,FALSE,yes
+rainy,70,96,FALSE,yes
+rainy,75,80,FALSE,yes
+
+Sample Temp:
+count = 9
+temp = 85, 75, 75, 72, 81, 64, 83, 70, 75
+temp_sum = 680
+temp_avg = 75.55
+temp_var = 44.027777
+temp_sd = 6.63534308
+temp_nd = 0.05584396
+
+Sample Humidity:
+count = 9
+hum = 70, 80, 70, 90, 75, 65, 86, 96, 80
+hum_sum = 712
+hum_avg = 79.111111
+hum_sd = 10.21572861
+hum_nd = 0.021615273
+
+No:
+Outlook,Temperature,Humidity,Windy,Play
+sunny,85,82,FALSE,no
+sunny,80,90,TRUE,no
+rainy,65,70,TRUE,no
+sunny,72,95,FALSE,no
+rainy,73,91,TRUE,no
+
+Sample Temp:
+count = 5
+temp = 85, 80, 65, 72, 73
+temp_sum = 375
+temp_avg = 75
+temp_var = 59.5
+temp_sd = 7.71362431
+temp_nd = 0.050009629
+
+Sample Humidity:
+count = 5
+hum = 82, 90, 70, 95, 91
+hum_sum = 428
+hum_avg = 85.6
+hum_sd = 9.914635646
+hum_nd = 0.008324644
+
+
+Nominal:
+
+Outlook Sunny:
+count = 4
+yes = 1/4
+no = 3/4
+
+
+Windy False:
+count = 8
+yes = 6/8 = 3/4
+no = 2/8 = 1/4
+
+Windy True:
+count = 6
+yes = 3/6
+no = 3/6
+
+Continuous:
+temp = 85, 75, 75, 72, 81, 64, 83, 70, 75, 85, 80, 65, 72, 73
+temp_sum = 1055
+temp_avg = 75.357
+temp_sd = 6.743739466
+temp_nd = 0.055652343
+
+hum = 70, 80, 70, 90, 75, 65, 86, 96, 80, 82, 90, 70, 95, 91
+hum_sum = 1140
+hum_avg = 81.42857143
+hum_sd = 10.24105077
+hum_nd = 0.016489528
+
+Yes:
+NUMER = 0.000145497
+DENOM = 0.714999014
+EQUAL = 0.000203492
+
+No:
+NUMER = 0.000027863
+DENOM = 0.429284728
+EQUAL = 0.000064906

@@ -14,11 +14,11 @@ Original:
 3. test loss, test acc: 0.11949807405471802, 0.9650999903678894
 
 Improved:
-1. test loss, test acc: 0.05425889790058136, 0.9902999997138977
+1. test loss, test acc: 0.05425889790058136, 0.9922999997138977
 
 2. test loss, test acc: 0.037460219115018845, 0.9921000003814697
 
-3. test loss, test acc: 0.04055272042751312, 0.9901000261306763
+3. test loss, test acc: 0.04055272042751312, 0.9911000261306763
 '''
 
 ''' Why it is better?
@@ -103,7 +103,7 @@ ds_train, ds_valid, ds_test = load_mnist()
 
 # Runs training runs times
 runs = 3
-epochs = 50
+epochs = 25
 results = []
 for i in range(runs):
 	# Callback for saving best epoch checkpoint weights
@@ -142,12 +142,15 @@ for i in range(runs):
 	l = tfk.layers.AveragePooling2D()(l)
 	l = tfk.layers.Flatten()(l)
 
-	# First dense layer with dropout
-	l = tfk.layers.Dense(128, activation='relu')(l)
+	# First dense layer with batch norm & dropout
+	l = tfk.layers.Dense(128)(l)
+	l = tfk.layers.BatchNormalization()(l)
+	l = tfk.layers.Activation('relu')(l)
 	l = tfk.layers.Dropout(0.5)(l)
 
 	# Output dense layer, 10 classes
-	output_layer = tfk.layers.Dense(10, activation='softmax')(l)
+	l = tfk.layers.Dense(10)(l)
+	output_layer = tfk.layers.Activation('softmax')(l)
 
 	# Compiles model with adam optimizer
 	model = tfk.Model(input_layer, output_layer)

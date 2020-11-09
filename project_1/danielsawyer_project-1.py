@@ -2,7 +2,7 @@
 Daniel Sawyer
 danielsawyer@usf.edu
 Data Mining Fall 2020
-CNN MNIST
+CNN MNIST Project
 '''
 
 ''' Results 
@@ -54,6 +54,7 @@ you got as well as the previous requested information.
 '''
 
 # Imports needed
+import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import tensorflow.keras as tfk
@@ -63,7 +64,7 @@ def normalize_img(image, label):
 	"""Normalizes images: `uint8` -> `float32`."""
 	return tf.cast(image, tf.float32) / 255., label
 
-# ADDED: Created function to load MNIST data
+# Function to load MNIST data
 def load_mnist():
 	(ds_train, ds_valid, ds_test), ds_info = tfds.load(
 			'mnist',
@@ -97,12 +98,15 @@ def load_mnist():
 
 	return ds_train, ds_valid, ds_test
 
-# ADDED: main function, not using main function is sloppy python code
-def main():
-	# ADDED: Loads data
-	ds_train, ds_valid, ds_test = load_mnist()
+# Loads data
+ds_train, ds_valid, ds_test = load_mnist()
 
-	# ADDED: Callbacks for saving best epoch model
+# Runs training runs times
+runs = 3
+epochs = 50
+results = []
+for i in range(runs):
+	# Callback for saving best epoch checkpoint weights
 	model_path = 'mnist_best_ckpt.h5'
 	checkpoint = tfk.callbacks.ModelCheckpoint(
 		filepath=model_path, 
@@ -112,20 +116,27 @@ def main():
 	)
 	callbacks = [checkpoint]
 
-	### ADDED: Creates model START ###
 	# Input shape and layer
 	input_shape = (28, 28, 1)
 	input_layer = tfk.layers.Input(shape=input_shape)
 
-	# First convolution and batch norm
+	# First convolution, batch norm, and dropout
 	l = tfk.layers.Conv2D(32, 3)(input_layer)
-	l = tfk.layers.Activation('relu')(l)
 	l = tfk.layers.BatchNormalization()(l)
+	l = tfk.layers.Activation('relu')(l)
+	l = tfk.layers.Dropout(0.1)(l)
 
-	# Second convolution and batchnorm
+	# Second convolution, batch norm, and dropout
 	l = tfk.layers.Conv2D(64, 3)(l)
-	l = tfk.layers.Activation('relu')(l)
 	l = tfk.layers.BatchNormalization()(l)
+	l = tfk.layers.Activation('relu')(l)
+	l = tfk.layers.Dropout(0.1)(l)
+
+	# Third convolution, batch norm, and dropout
+	l = tfk.layers.Conv2D(128, 3)(l)
+	l = tfk.layers.BatchNormalization()(l)
+	l = tfk.layers.Activation('relu')(l)
+	l = tfk.layers.Dropout(0.1)(l)
 
 	# Max pooling layer and flattens for dense layers
 	l = tfk.layers.AveragePooling2D()(l)
@@ -137,35 +148,40 @@ def main():
 
 	# Output dense layer, 10 classes
 	output_layer = tfk.layers.Dense(10, activation='softmax')(l)
-	### ADDED: Creates model END ###
 
-	# ADDED: Compiles model with adamax optimizer, learning rate 0.001
+	# Compiles model with adam optimizer
 	model = tfk.Model(input_layer, output_layer)
-	opt = tfk.optimizers.Adamax(learning_rate=0.001)
+	opt = tfk.optimizers.Adam(learning_rate=0.001)
 	model.compile(
 		loss='sparse_categorical_crossentropy',
 		optimizer=opt,
 		metrics=['accuracy']
 	)
 
-	# ADDED: Prints model summary
+	# Prints model summary
 	model.summary()
 
-	# ADDED: Trains model with increased epochs and saves best
+	# Trains model with increased epochs and saves best
 	model.fit(
 		ds_train,
-		epochs=100,
+		epochs=epochs,
 		validation_data=ds_valid,
-		callbacks = callbacks
+		callbacks=callbacks
 	)
 
-	# ADDED: Load best saved model from checkpoint callbacks
-	model_best = tfk.models.load_model(model_path)
+	# Load best model weights from checkpoint and print results
+	model.load_weights(model_path)
+	res = model.evaluate(ds_test, batch_size=128)
+	results.append(res[:2])
 
-	# ADDED: Evaluates best model and prints accuracy
-	results = model_best.evaluate(ds_test, batch_size=128)
-	print(f"test loss, test acc: {results[0]}, {results[1]}")
+# Prints results
+print()
+results = np.asarray(results)
+for i in range(runs):
+	print(f'RESULT {i+1}: test loss, test acc: {results[i, 0]:4.4f}, {results[i, 1]:4.4f}')
 
-# If running this file directly
-if __name__ == '__main__':
-	main()
+# Prints average
+results /= runs
+loss = results[:, 0].sum()
+acc = results[:, 1].sum()
+print(f'AVERAGE : test loss, test acc: {loss:4.4f}, {acc:4.4f}')

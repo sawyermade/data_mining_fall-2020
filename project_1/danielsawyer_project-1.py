@@ -154,7 +154,7 @@ def main():
 	# ADDED: Trains model with increased epochs and saves best
 	model.fit(
 		ds_train,
-		epochs=50,
+		epochs=100,
 		validation_data=ds_valid,
 		callbacks = callbacks
 	)

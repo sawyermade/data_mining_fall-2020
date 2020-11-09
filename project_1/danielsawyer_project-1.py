@@ -169,7 +169,7 @@ for i in range(runs):
 		callbacks=callbacks
 	)
 
-	# Load best model weights from checkpoint and print results
+	# Load best model weights from checkpoint and save results
 	model.load_weights(model_path)
 	res = model.evaluate(ds_test, batch_size=128)
 	results.append(res[:2])

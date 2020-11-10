@@ -65,11 +65,11 @@ def normalize_img(image, label):
 	return tf.cast(image, tf.float32) / 255., label
 
 # Function to load MNIST data
+# First 25% and last 25% from training, then validation data is 5%
+# from 25% of train data to 30% and test is the usual 10K
 def load_mnist():
 	(ds_train, ds_valid, ds_test), ds_info = tfds.load(
 			'mnist',
-	# First 25% and last 25% from training, then validation data is 5%
-	# from 25% of train data to 30% and test is the usual 10K
 			split=['train[:25%]+train[-25%:]','train[25%:30%]', 'test'],
 			shuffle_files=True,
 			as_supervised=True,
@@ -98,6 +98,7 @@ def load_mnist():
 
 	return ds_train, ds_valid, ds_test
 
+# Main def bc i'm not a python slob ;)
 def main():
 	# Loads data
 	ds_train, ds_valid, ds_test = load_mnist()

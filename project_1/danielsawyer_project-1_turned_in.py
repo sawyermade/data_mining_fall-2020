@@ -173,7 +173,7 @@ def main():
 
 	# ADDED: Evaluates best model and prints accuracy
 	results = model_best.evaluate(ds_test, batch_size=128)
-	print(f"test loss, test acc: {results[0]}, {results[1]}")
+	print(f'test loss, test acc: {results[0]}, {results[1]}')
 
 if __name__ == '__main__':
 	main()

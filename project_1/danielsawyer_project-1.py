@@ -98,93 +98,97 @@ def load_mnist():
 
 	return ds_train, ds_valid, ds_test
 
-# Loads data
-ds_train, ds_valid, ds_test = load_mnist()
+def main():
+	# Loads data
+	ds_train, ds_valid, ds_test = load_mnist()
 
-# Runs training runs times
-runs = 3
-epochs = 25
-results = []
-for i in range(runs):
-	# Callback for saving best epoch checkpoint weights
-	model_path = 'mnist_best_ckpt.h5'
-	checkpoint = tfk.callbacks.ModelCheckpoint(
-		filepath=model_path, 
-		monitor='val_accuracy', 
-		verbose=1, 
-		save_best_only=True
-	)
-	callbacks = [checkpoint]
+	# Runs training runs times
+	runs = 3
+	epochs = 25
+	results = []
+	for i in range(runs):
+		# Callback for saving best epoch checkpoint weights
+		model_path = 'mnist_best_ckpt.h5'
+		checkpoint = tfk.callbacks.ModelCheckpoint(
+			filepath=model_path, 
+			monitor='val_accuracy', 
+			verbose=1, 
+			save_best_only=True
+		)
+		callbacks = [checkpoint]
 
-	# Input shape and layer
-	input_shape = (28, 28, 1)
-	input_layer = tfk.layers.Input(shape=input_shape)
+		# Input shape and layer
+		input_shape = (28, 28, 1)
+		input_layer = tfk.layers.Input(shape=input_shape)
 
-	# First convolution, batch norm, and dropout
-	l = tfk.layers.Conv2D(32, 3)(input_layer)
-	l = tfk.layers.BatchNormalization()(l)
-	l = tfk.layers.Activation('relu')(l)
-	l = tfk.layers.Dropout(0.1)(l)
+		# First convolution, batch norm, and dropout
+		l = tfk.layers.Conv2D(32, 3)(input_layer)
+		l = tfk.layers.BatchNormalization()(l)
+		l = tfk.layers.Activation('relu')(l)
+		l = tfk.layers.Dropout(0.1)(l)
 
-	# Second convolution, batch norm, and dropout
-	l = tfk.layers.Conv2D(64, 3)(l)
-	l = tfk.layers.BatchNormalization()(l)
-	l = tfk.layers.Activation('relu')(l)
-	l = tfk.layers.Dropout(0.1)(l)
+		# Second convolution, batch norm, and dropout
+		l = tfk.layers.Conv2D(64, 3)(l)
+		l = tfk.layers.BatchNormalization()(l)
+		l = tfk.layers.Activation('relu')(l)
+		l = tfk.layers.Dropout(0.1)(l)
 
-	# Third convolution, batch norm, and dropout
-	l = tfk.layers.Conv2D(128, 3)(l)
-	l = tfk.layers.BatchNormalization()(l)
-	l = tfk.layers.Activation('relu')(l)
-	l = tfk.layers.Dropout(0.1)(l)
+		# Third convolution, batch norm, and dropout
+		l = tfk.layers.Conv2D(128, 3)(l)
+		l = tfk.layers.BatchNormalization()(l)
+		l = tfk.layers.Activation('relu')(l)
+		l = tfk.layers.Dropout(0.1)(l)
 
-	# Max pooling layer and flattens for dense layers
-	l = tfk.layers.AveragePooling2D()(l)
-	l = tfk.layers.Flatten()(l)
+		# Max pooling layer and flattens for dense layers
+		l = tfk.layers.AveragePooling2D()(l)
+		l = tfk.layers.Flatten()(l)
 
-	# First dense layer with batch norm & dropout
-	l = tfk.layers.Dense(128)(l)
-	l = tfk.layers.BatchNormalization()(l)
-	l = tfk.layers.Activation('relu')(l)
-	l = tfk.layers.Dropout(0.5)(l)
+		# First dense layer with batch norm & dropout
+		l = tfk.layers.Dense(128)(l)
+		l = tfk.layers.BatchNormalization()(l)
+		l = tfk.layers.Activation('relu')(l)
+		l = tfk.layers.Dropout(0.5)(l)
 
-	# Output dense layer, 10 classes
-	l = tfk.layers.Dense(10)(l)
-	output_layer = tfk.layers.Activation('softmax')(l)
+		# Output dense layer, 10 classes
+		l = tfk.layers.Dense(10)(l)
+		output_layer = tfk.layers.Activation('softmax')(l)
 
-	# Compiles model with adam optimizer
-	model = tfk.Model(input_layer, output_layer)
-	opt = tfk.optimizers.Adam(learning_rate=0.001)
-	model.compile(
-		loss='sparse_categorical_crossentropy',
-		optimizer=opt,
-		metrics=['accuracy']
-	)
+		# Compiles model with adam optimizer
+		model = tfk.Model(input_layer, output_layer)
+		opt = tfk.optimizers.Adam(learning_rate=0.001)
+		model.compile(
+			loss='sparse_categorical_crossentropy',
+			optimizer=opt,
+			metrics=['accuracy']
+		)
 
-	# Prints model summary
-	model.summary()
+		# Prints model summary
+		model.summary()
 
-	# Trains model with increased epochs and saves best
-	model.fit(
-		ds_train,
-		epochs=epochs,
-		validation_data=ds_valid,
-		callbacks=callbacks
-	)
+		# Trains model with increased epochs and saves best
+		model.fit(
+			ds_train,
+			epochs=epochs,
+			validation_data=ds_valid,
+			callbacks=callbacks
+		)
 
-	# Load best model weights from checkpoint and save results
-	model.load_weights(model_path)
-	res = model.evaluate(ds_test, batch_size=128)
-	results.append(res[:2])
+		# Load best model weights from checkpoint and save results
+		model.load_weights(model_path)
+		res = model.evaluate(ds_test, batch_size=128)
+		results.append(res[:2])
 
-# Prints results
-print()
-results = np.asarray(results)
-for i in range(runs):
-	print(f'RESULT {i+1}: test loss, test acc: {results[i, 0]:4.4f}, {results[i, 1]:4.4f}')
+	# Prints results
+	print()
+	results = np.asarray(results)
+	for i in range(runs):
+		print(f'RESULT {i+1}: test loss, test acc: {results[i, 0]:4.4f}, {results[i, 1]:4.4f}')
 
-# Prints average
-results /= runs
-loss = results[:, 0].sum()
-acc = results[:, 1].sum()
-print(f'AVERAGE : test loss, test acc: {loss:4.4f}, {acc:4.4f}')
+	# Prints average
+	results /= runs
+	loss = results[:, 0].sum()
+	acc = results[:, 1].sum()
+	print(f'AVERAGE : test loss, test acc: {loss:4.4f}, {acc:4.4f}')
+
+if __name__ == '__main__':
+	main()

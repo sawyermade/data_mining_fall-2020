@@ -140,7 +140,7 @@ def main():
 		l = tfk.layers.Activation('relu')(l)
 		l = tfk.layers.Dropout(0.1)(l)
 
-		# Max pooling layer and flattens for dense layers
+		# Avg pooling layer and flattens for dense layers
 		l = tfk.layers.AveragePooling2D()(l)
 		l = tfk.layers.Flatten()(l)
 

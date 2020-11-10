@@ -188,7 +188,7 @@ def main():
 	# Prints average
 	loss = results[:, 0].sum() / runs 
 	acc = results[:, 1].sum() / runs
-	print(f'AVERAGE : test loss, test acc: {loss:4.4f}, {acc:4.4f}')
+	print(f'AVERAGE : test loss, test acc: {loss:4.4f}, {acc:4.4f}\n')
 
 if __name__ == '__main__':
 	main()

@@ -58,6 +58,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import tensorflow.keras as tfk
+import sys
 
 # Normalize function from professor
 def normalize_img(image, label):
@@ -69,41 +70,49 @@ def normalize_img(image, label):
 # from 25% of train data to 30% and test is the usual 10K
 def load_mnist():
 	(ds_train, ds_valid, ds_test), ds_info = tfds.load(
-			'mnist',
-			split=['train[:25%]+train[-25%:]','train[25%:30%]', 'test'],
-			shuffle_files=True,
-			as_supervised=True,
-			with_info=True,
+		'mnist',
+		split=['train[:25%]+train[-25%:]','train[25%:30%]', 'test'],
+		shuffle_files=True,
+		as_supervised=True,
+		with_info=True
 	)
 
 	ds_train = ds_train.map(
-			normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+		normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE
+	)
 	ds_train = ds_train.cache()
 	ds_train = ds_train.shuffle(ds_info.splits['train'].num_examples)
 	ds_train = ds_train.batch(128)
 	ds_train = ds_train.prefetch(tf.data.experimental.AUTOTUNE)
 
 	ds_test = ds_test.map(
-			normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+		normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE
+	)
 	ds_test = ds_test.batch(128)
 	ds_test = ds_test.cache()
 	ds_test = ds_test.prefetch(tf.data.experimental.AUTOTUNE)
 
 	ds_valid = ds_valid.map(
-			normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+		normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE
+	)
 	ds_valid = ds_valid.batch(64)
 	ds_valid = ds_valid.cache()
 	ds_valid = ds_valid.prefetch(tf.data.experimental.AUTOTUNE)
 
 	return ds_train, ds_valid, ds_test
 
-# Main def bc i'm not a python slob ;)
+# Main def bc you should code like a sir ;)
 def main():
 	# Loads data
 	ds_train, ds_valid, ds_test = load_mnist()
 
+	# Checks if runs arg was passed
+	if len(sys.argv) > 1:
+		runs = int(sys.argv[1])
+	else:
+		runs = 3
+
 	# Runs training runs times
-	runs = 3
 	epochs = 25
 	results = []
 	for i in range(runs):
@@ -179,7 +188,7 @@ def main():
 		results.append(res[:2])
 
 	# Prints results
-	print()
+	print(f'\nRuns: {runs}')
 	results = np.asarray(results)
 	for i in range(runs):
 		print(f'RESULT {i+1}: test loss, test acc: {results[i, 0]:4.4f}, {results[i, 1]:4.4f}')

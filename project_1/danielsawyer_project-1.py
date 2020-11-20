@@ -89,7 +89,6 @@ def load_mnist():
 	ds_test = ds_test.cache()
 	ds_test = ds_test.prefetch(tf.data.experimental.AUTOTUNE)
 
-
 	ds_valid = ds_valid.map(
 			normalize_img, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 	ds_valid = ds_valid.batch(64)

@@ -101,7 +101,7 @@ def load_mnist():
 
 	return ds_train, ds_valid, ds_test
 
-# Main def bc you should code like a sir ;)
+# Main def bc it's good form ;)
 def main():
 	# Loads data
 	ds_train, ds_valid, ds_test = load_mnist()

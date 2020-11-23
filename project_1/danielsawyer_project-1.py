@@ -22,7 +22,7 @@ Improved:
 '''
 
 ''' Why it is better?
-Well, there are quite a few reasons this is getting better performance than the original model. First, there are convolutional layers which extract feature discriptors that allow for better identification of the discerning features between the classes of numbers [0,9]. This allows for more robust detection in the unseen test set. Second I added batch normalization and dropout which help to prevent overfitting and give a more accurate result on the test sets. Finally, I used checkpoint callbacks which only save the best model/epoch and increased the epochs for better training. I was able to consistently get 99+% accuracy on the test set.
+Well, there are quite a few reasons this is getting better performance than the original model. First, there are convolutional layers which extract feature discriptors that allow for better identification of the discerning features between the classes of numbers [0,9]. This allows for more robust detection in the unseen test set. Second, I added batch normalization and dropout which help to prevent overfitting and give a more accurate result on the test set. Finally, I used checkpoint callbacks which only save the best model/epoch and increased the epochs for better training. I was able to consistently get 99+% accuracy on the test set.
 '''
 
 ''' Project Info

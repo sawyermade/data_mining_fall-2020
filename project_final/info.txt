@@ -1,0 +1,22 @@
+You will work with cifar100 as set up in finalproject.pyPreview the document (in terms of train, validation  and test). This dataset consists of color images of size 32x32 of 100 classes (https://www.cs.toronto.edu/~kriz/cifar.html (Links to an external site.)). Hence, 3 channels R, G, B. I took out 10% for validation.
+You can change this around, but must be very clear on what was done and why.
+You must improve on 44% accuracy (which is a fairly low bar). You need to
+provide a best class accuracy and worst class accuracy. To improve, more epochs
+can help, but that cannot be the only change you make. You should show better
+performance at 15 epochs or argue why it is not possible.
+
+I also want you to use a snapshot ensemble of at least 5 snapshots. One
+way to choose the best class is to sum the per class outputs and take the
+maximum. Another is to vote for the class and break ties in some way.
+Indicate if results are better or worse or the same. (This is 5
+extra credit points of the grade).
+
+You must clearly explain what you tried and why and what seemed to work
+and what did not. That will be the major part of your grade. Higher
+accuracy will also improve your grade. If you use an outside source, it
+must be disclosed and that source may be credited with part of the grade.
+
+Please upload your commented python (py) file with the achieved accuracy and how you obtained it.
+The best accuracy in class will add
+4 points to their overall average grade, second best 3 points and 3rd best 2
+points and 4th best 1 point.
